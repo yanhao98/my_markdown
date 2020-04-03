@@ -1,0 +1,68 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final StreamController<int> _streamController = StreamController();
+  Timer _timer;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Material App',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Material App Bar'),
+        ),
+        body: Center(
+          child: Container(
+            child: StreamBuilder(
+              stream: _streamController.stream,
+              // initialData: 0,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                int timeLeft = snapshot.data ?? 0; // 剩余时间
+                String buttonText = '';
+
+                if (timeLeft <= 0) {
+                  buttonText = '重新获取';
+                } else {
+                  buttonText = timeLeft.toString();
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  buttonText = '获取验证码'; // 倒计时没有用过/没有获取过验证码
+                }
+
+                print('streamBuilder,$snapshot');
+                return RaisedButton(
+                  onPressed: timeLeft <= 0 ? handleSendSms : null,
+                  child: Text(buttonText),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  handleSendSms() {
+    print('调用接口');
+    _streamController.add(5); // 第一次手动 add
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      print('timer.tick:${timer.tick}');
+      _streamController.add(5 - timer.tick);
+      if (timer.tick >= 5) {
+        _timer.cancel();
+        _timer = null;
+      }
+    });
+  }
+}
