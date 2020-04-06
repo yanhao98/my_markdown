@@ -146,6 +146,34 @@ const AspectRatio({
 
 ## W: Stack
 
+```dart
+Stack({
+  Key key,
+  this.alignment = AlignmentDirectional.topStart,
+  this.textDirection,
+  this.fit = StackFit.loose,
+  this.overflow = Overflow.clip,
+  List<Widget> children = const <Widget>[],
+})
+```
+
+
+
+## W: Positioned
+
+```dart
+Positioned({
+  Key key,
+  this.left,
+  this.top,
+  this.right,
+  this.bottom,
+  this.width,
+  this.height,
+  @required Widget child,
+})
+```
+
 
 
 ## W: Transform
@@ -167,6 +195,20 @@ LimitedBox(
 
 
 ## W: AspectRatio
+
+
+
+
+
+# W: CustomScrollView
+
+https://segmentfault.com/a/1190000019902201
+
+ ## SliverToBoxAdapter
+
+> Creates a sliver that contains a single box widget.
+
+
 
 
 
