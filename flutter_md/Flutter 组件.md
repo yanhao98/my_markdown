@@ -1,8 +1,12 @@
+# 组件整理网站
+
+http://laomengit.com/
+
+
+
 # MaterialApp
 
-## theme
-
-## ThemeData
+## 属性: theme
 
 ```dart
 new ThemeData(
@@ -10,7 +14,7 @@ new ThemeData(
       )
 ```
 
-## home
+## 属性: home
 
 
 
@@ -30,7 +34,7 @@ Creates a visual scaffold for material design widgets.
 
 
 
-## body
+## 属性: body
 
 
 
@@ -108,9 +112,21 @@ mainAxisSize: MainAxisSize.max,
 crossAxisAlignment :CrossAxisAlignment.center,
 ```
 
-### Expanded
+### W: Expanded
 
 在 Column 和  Row 中代表着平均充满的作用，当有两个存在的时候默认均分充满。同时页可以设置 `flex` 属性决定比例。（flex默认=1）
+
+### W: Spacer
+
+*包装了一个 Expanded 的 SizedBox 。*
+等同于
+
+```dart
+Expanded(
+  flex: flex,
+  child: const SizedBox.shrink(),
+);
+```
 
 
 
@@ -311,19 +327,37 @@ https://blog.csdn.net/zgcqflqinhao/article/details/85121054
 
 
 
-# 路由
+
+
+## W: ListWheelScrollView
+
+![](https://tva1.sinaimg.cn/large/00831rSTgy1gdjtudyhg1j30dw0ozt9g.jpg)
+
+
+
+
+
+
+
+# GestureDetector
+
+*检测手势*
+
+
+
+# 路由组件
 
 路由原理：https://juejin.im/post/5c8db8e8f265da2d864b889f
 
 
 
-## W: ModalRoute
+## W: [ModalRoute](https://api.flutter.dev/flutter/widgets/ModalRoute/maintainState.html)
 
 ### 参数：maintainState = true
 
 ​	路由处于非活动状态时是否应保留在内存中。
 
-https://api.flutter.dev/flutter/widgets/ModalRoute/maintainState.html
+
 
 screen1 push 到 screen2
 

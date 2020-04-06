@@ -1,0 +1,12 @@
+- [BlocProvider.of(context) returns null](https://www.didierboelens.com/2019/04/blocprovider.ofcontext-returns-null/)
+- [How to navigate to another screen after stream event?](https://stackoverflow.com/questions/51567885/flutter-bloc-pattern-how-to-navigate-to-another-screen-after-stream-event)
+- [Reload data when using FutureBuilder](https://stackoverflow.com/questions/53170330/reload-data-when-using-futurebuilder)
+- [多环境配置](https://medium.com/flutter-community/add-multiple-targets-in-flutter-apps-vs-code-android-studio-efe7e588e0cd)
+- 点击非输入框时关闭键盘问题
+  - https://blog.csdn.net/qq_33635385/article/details/102835927
+  - https://www.jianshu.com/p/989d677d0403
+  - [flutter 使用keyboard_actions 关闭ios键盘](https://www.cnblogs.com/wupeng88/p/11772029.html)
+- [flutter取消动态字体大小](https://www.kikt.top/posts/flutter/layout/dynamic-text/)
+- sizedBox设置无效
+  - 可能是因为 `constrainedBox` 限制了。用`UnconstrainedBox`解决
+
