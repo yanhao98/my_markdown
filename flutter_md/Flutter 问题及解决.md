@@ -9,4 +9,7 @@
 - [flutter取消动态字体大小](https://www.kikt.top/posts/flutter/layout/dynamic-text/)
 - sizedBox设置无效
   - 可能是因为 `constrainedBox` 限制了。用`UnconstrainedBox`解决
+- 没有 context 跳转路由的解决
+  - <img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdjv8qsqspj30uu0u079y.jpg" style="zoom:50%;" />
+- 
 
