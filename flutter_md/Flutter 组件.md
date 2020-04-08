@@ -95,6 +95,25 @@ const BoxDecoration({
   })
 ```
 
+#### border
+
+```dart
+Border({
+  this.top = BorderSide.none,
+  this.right = BorderSide.none,
+  this.bottom = BorderSide.none,
+  this.left = BorderSide.none,
+})
+```
+
+```dart
+Border.all({
+  Color color = const Color(0xFF000000),
+  double width = 1.0,
+  BorderStyle style = BorderStyle.solid,
+})
+```
+
 
 
 ## W: Center
@@ -132,7 +151,7 @@ Expanded(
 
 ## W: AspectRatio
 
-让child按照比例显示。
+让child按照比例（长宽比）显示。
 
 ```dart
 const AspectRatio({
@@ -198,17 +217,89 @@ LimitedBox(
 
 
 
+## W: LayoutBuilder
+
+```dart
+LayoutBuilder({
+  Key key,
+  @required LayoutWidgetBuilder builder,
+})
+```
+### LayoutWidgetBuilder
+
+```dart
+typedef LayoutWidgetBuilder = Widget Function(BuildContext context, BoxConstraints constraints);
+```
+
 
 
 # W: CustomScrollView
 
 https://segmentfault.com/a/1190000019902201
 
+- `SliverAppBar`：Creates a material design app bar that can be placed in a CustomScrollView.
+- `SliverPersistentHeader`：Creates a sliver that varies its size when it is scrolled to the start of a viewport.
+- `SliverFillRemaining`：Creates a sliver that fills the remaining space in the viewport.
+- `SliverToBoxAdapter`：Creates a sliver that contains a single box widget.
+- `SliverPadding`：Creates a sliver that applies padding on each side of another sliver.
+
  ## SliverToBoxAdapter
 
 > Creates a sliver that contains a single box widget.
 
 
+
+## SliverGrid
+
+```dart
+SliverGrid(
+  delegate: SliverChildBuilderDelegate(
+    (BuildContext context, int index) {
+      print('渲染 Grid：$index');
+      return Container();
+    },
+  ),
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+    childAspectRatio: 16 / 16,
+    crossAxisSpacing: 8.0,
+    mainAxisSpacing: 8.0,
+  ),
+)
+```
+
+### 参数: delegate
+
+- 值: SliverChildBuilderDelegate()
+
+  - ```dart
+    SliverChildBuilderDelegate(
+      (BuildContext context, int index) {
+        print('渲染 Grid：$index');
+        return Container();
+      },
+    )
+    ```
+
+- 值: SliverChildListDelegate()
+
+  - ```dart
+    SliverChildListDelegate(
+      this.children, {
+      this.addAutomaticKeepAlives = true,
+      this.addRepaintBoundaries = true,
+      this.addSemanticIndexes = true,
+      this.semanticIndexCallback = _kDefaultSemanticIndexCallback,
+      this.semanticIndexOffset = 0,
+    })
+    ```
+
+### 参数: gridDelegate
+
+> The delegate that controls the size and position of the children.
+
+- 值: SliverGridDelegateWithFixedCrossAxisCount()
+- 值: SliverGridDelegateWithMaxCrossAxisExtent()
 
 
 
@@ -424,17 +515,3 @@ Navigator.of(context).push(MaterialPageRoute(
 2. screen2 会执行 initState
 3. 从screen2 pop 到screen1
 4. screen1 不会执行 initState
-
-
-
-# 未整理
-
-ScreenUtil 适配
-
-Container、Row、Column、Text、IconButton、Icon、BoxDecoration、Center、Expanded
-
-[flutter控件Flexible和 Expanded的区别](https://blog.csdn.net/chunchun1230/article/details/82460257)
-
-pushNamedAndRemoveUntil
-
-spaceEvenly、spaceAround、spaceBetween区别
