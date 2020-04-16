@@ -1,5 +1,9 @@
 # Equatable
 
+# flutter_screenutil
+
+# carousel_slider
+
 
 
 一些精选的 Flutter 包集合

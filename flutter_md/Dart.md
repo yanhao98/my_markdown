@@ -46,7 +46,9 @@ obj.runtimeType.toString()
 
 
 
-# Future.delayed
+# Future
+
+## Future.delayed
 
 ```dart
 Future<void> main() async {
@@ -63,7 +65,7 @@ request() async {
 
 
 
-# Future函数
+## Future函数
 
 ```dart
 Future<String> testFuture() {
@@ -75,7 +77,7 @@ Future<String> testFuture() {
 
 
 
-# Future.wait
+## Future.wait
 
 ```dart
 Future afterTwoThings(Future first, Future second) {
@@ -348,3 +350,6 @@ class MyBloc {
 MyBloc myBloc = MyBloc();
 ```
 
+# 运算符
+
+https://www.jianshu.com/p/64a6ed7581aa
