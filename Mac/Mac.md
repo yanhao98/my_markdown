@@ -13,3 +13,19 @@ ip.gs
 ip.sb
 
 ![image-20200406125736016](https://tva1.sinaimg.cn/large/00831rSTgy1gdjyjbap23j315e072q6g.jpg)
+
+
+
+# Curl
+
+```bash
+curl ip.sb
+```
+
+## 查看耗时
+
+```bash
+-w '\ntime_connect\t\t%{time_connect}\ntime_starttransfer\t%{time_starttransfer}\ntime_total\t\t%{time_total}\n'
+```
+
+![image-20200418152743251](https://i.loli.net/2020/04/18/pVdosGLz6XngZAC.png)

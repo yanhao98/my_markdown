@@ -1,4 +1,6 @@
-## yum install docker -y
+[TOC]
+
+yum install docker -y
 
 yum update
 
@@ -85,9 +87,13 @@ docker container update --restart=always mysql3306
 docker update --restart=always asp3000_biquge
 ```
 
+## 查看容器运行的各种数据
 
+```bash
+docker inspect redis
+```
 
-## 查看资源使用
+# 查看资源使用
 
 [docker stats](https://docs.docker.com/engine/reference/commandline/stats/)
 
@@ -104,7 +110,7 @@ docker stats [OPTIONS] [CONTAINER...]
 | `--no-stream`   |         | Disable streaming stats and only pull the first result |
 | `--no-trunc`    |         | Do not truncate output                                 |
 
-### 格式化输出的结果
+### 格式化输出的
 
 ```bash
 docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.MemUsage}}"
@@ -129,7 +135,7 @@ docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.MemUsage}
 
 
 
-# 网络
+# 网卡
 
 --net是网络模式，这里用的host模式。即和宿主机共用一个网络命名空间，就是使用宿主机的IP和端口。
 
@@ -190,3 +196,6 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 
 
 
+# Docker Compose
+
+https://docs.docker.com/compose/install/

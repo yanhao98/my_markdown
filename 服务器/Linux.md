@@ -184,14 +184,14 @@ chmod 600 .ssh/authorized_keys
 - -C：注释，通常为邮箱便于识别
 
 ```
-ssh-keygen -t rsa -b 4096 -C "me@yanhao.ren"
+ssh-keygen -t rsa -b 4096 -C "YanhaoMac"
 ssh-keygen -t rsa -b 2048 -C "me@yanhao.ren"
 ```
 
 **将公钥追加到 authorized_keys 中**
 
 ```bash
-cat id_rsa.pub >> /root/.ssh/authorized_keys *#将公钥追加到keys文件中* 
+cat id_rsa.pub >> /root/.ssh/authorized_keys 
 ```
 
 **设置authorized_keys权限**
@@ -207,10 +207,8 @@ chmod 600 .ssh/authorized_keys
 
 修改 sshd_config 文件
 
-将 sshd_config 中以下四个参数设置为如下所示
-
 ```
-vi  /etc/ssh/sshd_config 
+vi  /etc/ssh/sshd_config
 #禁用root账户登录，如果是用root用户登录请开启
 
 PermitRootLogin no
@@ -241,6 +239,35 @@ sudo systemctl status sshd.service
 ```bash
 sudo usermod -s /bin/bash yanhao
 ```
+
+## 问题
+
+### 权限问题
+
+.ssh目录，以及/home/当前用户 需要700权限，参考以下操作调整
+
+sudo chmod 700 ~/.ssh
+
+sudo chmod 700 /home/当前用户
+.ssh目录下的authorized_keys文件需要600或644权限，参考以下操作调整
+
+sudo chmod 600 ~/.ssh/authorized_keys
+
+### StrictModes问题
+
+编辑
+
+> sudo vi /etc/ssh/sshd_config
+
+找到
+
+> StrictModes yes
+
+改成
+
+> StrictModes no
+
+如果还不行，可以用ssh -vvv 目标机器ip 查看详情，根据输出内容具体问题具体分析了
 
 
 
