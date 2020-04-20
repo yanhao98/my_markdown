@@ -12,7 +12,7 @@ yum update
 - sudo gpasswd -a $USER docker     #将登陆用户加入到docker用户组中 
   -  usermod -G docker yanhao
 - newgrp docker     #更新用户组
--  docker ps    #测试docker命令是否可以使用sudo正常使用
+-  随便输一个 docker 命令测试是否有权限
 
 
 
@@ -25,9 +25,7 @@ groupadd：“docker”组已存在
 songyanyan@songyanyan:~$ sudo gpasswd -a $USER docker #将登陆用户加入到docker用户组中
 正在将用户“songyanyan”加入到“docker”组中
 songyanyan@songyanyan:~$ newgrp docker #更新用户组
-songyanyan@songyanyan:~$ docker ps #测试当前用户是否可以正常使用docker命令
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-songyanyan@songyanyan:~$ 
+songyanyan@songyanyan:~$ docker xxx
 ```
 
 
@@ -78,6 +76,7 @@ sudo systemctl stop docker
 ```bash
 docker exec -it nginx /bin/bash
 docker exec -it mysql /bin/bash
+docker exec -it redis redis-cli
 ```
 
 ## 更新容器参数
@@ -92,6 +91,28 @@ docker update --restart=always asp3000_biquge
 ```bash
 docker inspect redis
 ```
+
+## 容器列表
+
+```
+docker ps --help
+
+Usage:  docker ps [OPTIONS]
+
+List containers
+
+Options:
+  -a, --all             Show all containers (default shows just running)
+  -f, --filter filter   Filter output based on conditions provided
+      --format string   Pretty-print containers using a Go template
+  -n, --last int        Show n last created containers (includes all states) (default -1)
+  -l, --latest          Show the latest created container (includes all states)
+      --no-trunc        Don't truncate output
+  -q, --quiet           Only display numeric IDs
+  -s, --size            Display total file sizes
+```
+
+
 
 # 查看资源使用
 
@@ -137,21 +158,28 @@ docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.MemUsage}
 
 # 网卡
 
+```
+docker network --help
+```
+
+```
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+```
+
 --net是网络模式，这里用的host模式。即和宿主机共用一个网络命名空间，就是使用宿主机的IP和端口。
 
 也可以使用 -p 3306:3306这种方式来映射端口。
 
 但是它俩不能一起使用哦。
-
-
-
-# 镜像
-
-## MySQL
-
-自定义配置文件
-
-![image-20200415115422979](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdubacwhujj30na02ut9t.jpg)
 
 
 
@@ -199,3 +227,26 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 # Docker Compose
 
 https://docs.docker.com/compose/install/
+
+```
+docker-compose -f /projects/ziyifarm/docker-compose-ziyifarm.yml up -d
+```
+
+
+
+# 镜像
+
+## MySQL
+
+自定义配置文件
+
+![image-20200415115422979](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdubacwhujj30na02ut9t.jpg)
+
+
+
+## cloud-torrent
+
+```
+docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker/cloud-torrent/downloads:/downloads -v /home/docker/cloud-torrent/torrents:/torrents boypt/cloud-torrent
+```
+

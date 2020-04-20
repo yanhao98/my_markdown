@@ -145,8 +145,8 @@ chgrp [-R] 属组名 文件名
 语法：
 
 ```ashb
-chown [–R] 属主名 文件名
-chown [-R] 属主名：属组名 文件名
+sudo chown [–R] 属主名 文件名
+sudo chown [-R] 属主名：属组名 文件名
 ```
 
 进入 /root 目录（~）将install.log的拥有者改为bin这个账号：
@@ -305,11 +305,28 @@ sudo pwdx 31996
 
 # 日志
 
-登录日志：
+```
+/var/log/message` `– 记录系统日志或当前活动日志。
+/var/log/auth``.log – 身份认证日志。
+/var/log/cron` `– Crond 日志 (``cron` `任务).
+/var/log/maillog` `– 邮件服务器日志。
+/var/log/secure` `– 认证日志。
+/var/log/wtmp` `历史登录、注销、启动、停机日志和，lastb命令可以查看登录失败的用户
+/var/run/utmp` `当前登录的用户信息日志，w、``who``命令的信息便来源与此
+/var/log/yum``.log Yum 日志。
+```
+
+
+
+## 登录日志：
 
 ```bash
 cat /var/log/secure
 ```
+
+单独执行lastb指令，它会读取位于/var/log目录下，名称为btmp的文件，并把该文件内容
+
+记录的登入失败的用户名单，全部显示出来。
 
 
 
@@ -326,3 +343,6 @@ top命令后，输入大写的P
 
 按内存排序：
 top命令后，输入大写的M
+
+
+
