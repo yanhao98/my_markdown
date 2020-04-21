@@ -229,7 +229,7 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 https://docs.docker.com/compose/install/
 
 ```
-docker-compose -f /projects/ziyifarm/docker-compose-ziyifarm.yml up -d
+docker-compose -f /xx.yml up -d
 ```
 
 

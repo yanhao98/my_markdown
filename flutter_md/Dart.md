@@ -350,6 +350,39 @@ class MyBloc {
 MyBloc myBloc = MyBloc();
 ```
 
+
+
 # 运算符
 
 https://www.jianshu.com/p/64a6ed7581aa
+
+
+
+# Extension
+
+> 在 Dart 2.7 版本中，新加入了一个重要的语法功能，叫做extension。
+>
+> Extension 的主要功能给已经存在的类添加新的 member function，往里面增加新的函数。通过 extension ， 我们可以向诸如 Iterable , String 这样的常用类里面增加一些方便的函数。
+
+## 扩展 String 的功能
+
+```dart
+extension ParseNumbers on String {
+  int parseInt() {
+    print(this);
+    return int.parse(this);
+  }
+
+  double parseDouble() {
+    return double.parse(this);
+  }
+}
+```
+
+使用扩展的功能
+
+```dart
+print('12'.parseInt().runtimeType);
+//int
+```
+
