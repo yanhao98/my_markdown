@@ -1,8 +1,94 @@
 [TOC]
 
-yum install docker -y
+# 安装
 
-yum update
+## 安装docker
+
+```bash
+curl -fsSL https://get.docker.com/ | sh
+```
+
+## 配置国内镜像源
+
+https://www.daocloud.io/mirror
+
+## Docker Compose
+
+https://docs.docker.com/compose/install/
+
+```bash
+sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+### pip 安装 Docker Compose
+
+```bash
+yum -y install epel-release
+ 
+yum -y install python-pip
+ 
+#升级
+pip install --upgrade pip
+
+pip install docker-compose
+docker-compose -version
+```
+
+
+
+### docker-compose 使用
+
+```
+docker-compose -f /xx.yml up -d
+```
+
+```bash
+GID="$(id -g)" docker-compose config
+```
+
+
+
+## 卸载
+
+```bash
+yum list installed | grep docker
+```
+
+![image-20200425094839457](https://i.loli.net/2020/04/25/zwpWQkU6yV5OcKh.png)
+
+
+
+
+
+# 服务管理
+
+```
+systemctl start docker  #启动docker
+systemctl enable docker #开机启动docker
+systemctl status docker #查看docker状态
+```
+
+**systemctl 方式**
+
+守护进程重启
+
+```
+systemctl daemon-reload
+```
+
+ 重启docker服务
+
+```
+systemctl restart docker
+```
+
+ 关闭docker
+
+```
+systemctl stop docker
+```
+
+
 
 
 
@@ -30,42 +116,7 @@ songyanyan@songyanyan:~$ docker xxx
 
 
 
-# 服务管理
 
-```
-systemctl start docker  #启动docker
-systemctl enable docker #开机启动docker
-systemctl status docker #查看docker状态
-```
-
-**systemctl 方式**
-
-守护进程重启
-
-```
-sudo systemctl daemon-reload
-```
-
- 重启docker服务
-
-```
-sudo systemctl restart docker
-```
-
- 关闭docker
-
-```
-sudo systemctl stop docker
-```
-
-
-
-**service 方式**
-
-重启docker服务
- `sudo service docker restart`
- 关闭docker
- `sudo service docker stop`
 
 
 
@@ -224,14 +275,6 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 
 
 
-# Docker Compose
-
-https://docs.docker.com/compose/install/
-
-```
-docker-compose -f /xx.yml up -d
-```
-
 
 
 # 镜像
@@ -249,4 +292,6 @@ docker-compose -f /xx.yml up -d
 ```
 docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker/cloud-torrent/downloads:/downloads -v /home/docker/cloud-torrent/torrents:/torrents boypt/cloud-torrent
 ```
+
+
 

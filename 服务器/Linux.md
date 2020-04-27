@@ -50,8 +50,9 @@ groupadd sauceapp
 
 **将userA添加到groupB用户组里面：** 
 
-```
+```bash
 gpasswd -a userA groupB
+sudo usermod -aG docker your-user
 ```
 
 **注意**：添加用户到某一个组可以使用 `usermod -G groupB userA` 这个命令可以添加一个用户到指定的组，但是以前添加的组就会清空掉，
@@ -64,9 +65,9 @@ gpasswd -A userA groupA
 
 ## 从组中删除用户
 
-编辑/etc/group 找到GROUP1那一行，删除 A 
+编辑/etc/group 找到GROUP1那一行，删除 user 
 
-或者用命令 gpasswd -d A GROUP
+或者用命令 gpasswd -d user GROUP
 
 
 
@@ -104,7 +105,7 @@ cat /etc/group
 groups
 ```
 
-## /etc/group 内容分析
+### /etc/group 内容分析
 
 ```
 cat /etc/group
@@ -171,6 +172,20 @@ sudo chown [-R] 属主名：属组名 文件名
 ```bash
 chmod 700 -R .ssh
 chmod 600 .ssh/authorized_keys
+```
+
+
+
+# 文件操作
+
+## 移动文件 
+
+把d1目录的中的test.txt移动到n1目录下面
+
+**重命名也是`mv`**
+
+```bash
+mv /tmp/d1/test.txt /tmp/n1
 ```
 
 
