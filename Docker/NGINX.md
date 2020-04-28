@@ -163,6 +163,7 @@ docker run -it --rm --name certbot \
  -v "/docker/letsencrypt/log:/var/log/letsencrypt" \
  -v "/docker/letsencrypt/wellknown_root:/wellknown_root" \
  certbot/certbot renew --dry-run
+# --force-renewal
 ```
 
 ## 自动续签
@@ -186,13 +187,16 @@ chmod +x renew_cert.sh
 重载 NGINX
 ```
 
-```
-*/5 * * * * /docker/renew_cert.sh
+```bash
+0 1 */7 * * /docker/renew_cert.sh
+# 每隔 7 天续签一次。
 ```
 
 
 
 ## certbot 命令
+
+https://blog.ibaoger.com/2017/03/07/certbot-command-line-tool-usage-document/
 
 查看当前的所有的证书信息
 
