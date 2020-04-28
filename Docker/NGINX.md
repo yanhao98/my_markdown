@@ -20,10 +20,19 @@
 # 重载配置
 
 ```bash
+docker-compose exec nginx nginx -s reload
+docker exec nginx nginx -s reload
+```
+
+
+
+```bash
 docker exec -it nginx bash
 nginx -t
 nginx -s reload
 ```
+
+
 
 # 配置文件
 
@@ -40,7 +49,7 @@ server {
 }
 ```
 
-# 端口转发
+## 端口转发
 
 ```nginx
   location / {
@@ -48,7 +57,7 @@ server {
   }
 ```
 
-# https
+## https
 
 ```nginx
 	listen 443 ssl;
@@ -58,7 +67,7 @@ server {
   ssl_certificate_key /cert_https/api.ziyifarm.com/privkey.pem;
 ```
 
-# 资源缓存
+## 资源缓存
 
 ```nginx
   location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
@@ -72,5 +81,73 @@ server {
     error_log off;
     access_log off;
   }
+```
+
+## `SSL`证书验证目录
+
+```NGINX
+    #一键申请SSL证书验证目录相关设置
+    location ~ \.well-known {
+        allow all;
+        root /wellknow_dir;
+    }
+```
+
+
+
+# Letsencrypt 证书
+
+https://letsencrypt.org/zh-cn/docs/staging-environment/
+
+
+
+## certbot
+
+https://certbot.eff.org/docs/using.html#webroot
+
+> **测试环境**
+>
+> ```bash
+> --dry-run
+> ```
+
+### NGINX
+
+```nginx
+  location ~ /.well-known {
+    autoindex on;
+    allow all;
+    root /wellknown_root;
+  }
+```
+
+### 颁发签证
+
+```bash
+docker run -it --rm --name certbot \
+ -v "/docker/letsencrypt/etc:/etc/letsencrypt" \
+ -v "/docker/letsencrypt/lib:/var/lib/letsencrypt" \
+ -v "/docker/letsencrypt/log:/var/log/letsencrypt" \
+ -v "/docker/letsencrypt/wellknown_root:/wellknown_root" \
+ certbot/certbot certonly --dry-run
+```
+
+![image-20200428101448390](https://i.loli.net/2020/04/28/KTPF8fWQRBCSNsu.png)
+
+### 重签
+
+```bash
+docker run -it --rm --name certbot \
+ -v "/docker/letsencrypt/etc:/etc/letsencrypt" \
+ -v "/docker/letsencrypt/lib:/var/lib/letsencrypt" \
+ -v "/docker/letsencrypt/log:/var/log/letsencrypt" \
+ -v "/docker/letsencrypt/wellknown_root:/wellknown_root" \
+ certbot/certbot renew --dry-run
+```
+
+
+
+```bash
+certbot certonly --webroot -w /var/www/example -d www.example.com -d example.com -w /var/www/other -d other.example.net -d another.other.example.net
 ```
 
