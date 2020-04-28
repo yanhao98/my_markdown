@@ -60,12 +60,30 @@ server {
 ## https
 
 ```nginx
-	listen 443 ssl;
+	# SSL-START
+  # 使用HSTS
+  listen 443 ssl;
 	#证书文件
   ssl_certificate /cert_https/api.ziyifarm.com/fullchain.pem;
   #私钥文件
   ssl_certificate_key /cert_https/api.ziyifarm.com/privkey.pem;
+  ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+  ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4:!DH:!DHE;
+  ssl_prefer_server_ciphers on;
+  # SSL-END
 ```
+
+## 强制 https
+
+```nginx
+  #HTTP_TO_HTTPS_START
+  if ($server_port !~ 443) {
+    rewrite ^(/.*)$ https://$host$1 permanent;
+  }
+  #HTTP_TO_HTTPS_END
+```
+
+
 
 ## 资源缓存
 
@@ -95,13 +113,15 @@ server {
 
 
 
-# Letsencrypt 证书
+
+
+# certbot
 
 https://letsencrypt.org/zh-cn/docs/staging-environment/
 
 
 
-## certbot
+## certbot 证书步骤
 
 https://certbot.eff.org/docs/using.html#webroot
 
@@ -111,7 +131,7 @@ https://certbot.eff.org/docs/using.html#webroot
 > --dry-run
 > ```
 
-### NGINX
+## 1.NGINX
 
 ```nginx
   location ~ /.well-known {
@@ -121,7 +141,7 @@ https://certbot.eff.org/docs/using.html#webroot
   }
 ```
 
-### 颁发签证
+## 2.颁发签证
 
 ```bash
 docker run -it --rm --name certbot \
@@ -134,7 +154,7 @@ docker run -it --rm --name certbot \
 
 ![image-20200428101448390](https://i.loli.net/2020/04/28/KTPF8fWQRBCSNsu.png)
 
-### 重签
+## 3.重签
 
 ```bash
 docker run -it --rm --name certbot \
@@ -145,9 +165,45 @@ docker run -it --rm --name certbot \
  certbot/certbot renew --dry-run
 ```
 
+## 自动续签
 
+定时任务`shell`脚本注意 `-d` 执行。
+
+`renew_cert.sh`
+
+添加可执行权限
 
 ```bash
-certbot certonly --webroot -w /var/www/example -d www.example.com -d example.com -w /var/www/other -d other.example.net -d another.other.example.net
+chmod +x renew_cert.sh
 ```
+
+```bash
+#!/bin/sh
+# Renew Certificate
+重签
+
+# reload nginx
+重载 NGINX
+```
+
+```
+*/5 * * * * /docker/renew_cert.sh
+```
+
+
+
+## certbot 命令
+
+查看当前的所有的证书信息
+
+```bash
+docker run -it --rm --name certbot \
+ -v "/docker/letsencrypt/etc:/etc/letsencrypt" \
+ -v "/docker/letsencrypt/lib:/var/lib/letsencrypt" \
+ -v "/docker/letsencrypt/log:/var/log/letsencrypt" \
+ -v "/docker/letsencrypt/wellknown_root:/wellknown_root" \
+ certbot/certbot certificates
+```
+
+![image-20200428105502724](https://i.loli.net/2020/04/28/WZQKPXYr9pRvfd2.png)
 

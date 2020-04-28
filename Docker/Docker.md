@@ -165,6 +165,24 @@ Options:
 
 
 
+
+
+# 容器内 yum
+
+```bash
+# 使用国内镜像
+mv /etc/apt/sources.list /etc/apt/sources.list.bak
+echo "deb http://mirrors.163.com/debian/ jessie main non-free contrib" >> /etc/apt/sources.list
+echo "deb http://mirrors.163.com/debian/ jessie-proposed-updates main non-free contrib" >>/etc/apt/sources.list
+echo "deb-src http://mirrors.163.com/debian/ jessie main non-free contrib" >>/etc/apt/sources.list
+echo "deb-src http://mirrors.163.com/debian/ jessie-proposed-updates main non-free contrib" >>/etc/apt/sources.list
+# 更新apt-get指令
+apt-get update
+apt-get install yum
+```
+
+
+
 # 查看资源使用
 
 [docker stats](https://docs.docker.com/engine/reference/commandline/stats/)
@@ -209,11 +227,11 @@ docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.MemUsage}
 
 # 网卡
 
-```
+```bash
 docker network --help
 ```
 
-```
+```bash
 Manage networks
 
 Commands:
