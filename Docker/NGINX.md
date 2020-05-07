@@ -49,11 +49,13 @@ server {
 }
 ```
 
-## 端口转发
+## 反向代理
 
 ```nginx
   location / {
     proxy_pass http://ziyifarm-api:8080/ziyifarm/;
+    proxy_set_header Host api.sauceapp.yanhao.ren;
+    proxy_set_header X-Forwarded-For $remote_addr;
   }
 ```
 

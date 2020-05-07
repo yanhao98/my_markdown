@@ -10,4 +10,5 @@
 
 - [Flutter使用Flare做动画](https://www.jianshu.com/p/a62fa1866a5f)
 - [flutter_bloc_crypto](https://github.com/MarcusNg/flutter_bloc_crypto)
-- 
+- [监听网络状态重试请求](https://www.youtube.com/watch?v=qkN0kcZxeVc&t=3s)
+

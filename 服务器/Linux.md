@@ -339,9 +339,23 @@ sudo pwdx 31996
 cat /var/log/secure
 ```
 
-单独执行lastb指令，它会读取位于/var/log目录下，名称为btmp的文件，并把该文件内容
 
-记录的登入失败的用户名单，全部显示出来。
+
+## lastb 登录失败记录
+
+清除记录
+
+```bash
+echo > /var/log/btmp
+```
+
+## last 登录成功记录
+
+清除记录
+
+```bash
+echo >/var/log/wtmp
+```
 
 
 
