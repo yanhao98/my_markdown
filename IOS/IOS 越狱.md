@@ -1,3 +1,7 @@
+# 越狱软件
+
+[checkra1n](https://checkra.in/)
+
 连接
 
 ```bash
