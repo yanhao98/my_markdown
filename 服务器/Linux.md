@@ -400,7 +400,7 @@ systemctl restart crond
 查看 crontab
 
 ```bash
-cat /etc/crontab
+  cat /etc/crontab
 ```
 
 ```bash

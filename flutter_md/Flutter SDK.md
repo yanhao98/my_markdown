@@ -11,6 +11,16 @@ flutter upgrade # 更新 SDK
 flutter --version
 ```
 
+```bash
+open ~/.zshrc
+source .zshrc
+```
+
+```bash
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+```
+
 <img src="https://tva1.sinaimg.cn/large/00831rSTgy1gdnax935lxj30fe05uwfr.jpg" alt="image-20200409102250243" align="left" style="zoom:50%;" />
 
 ```

@@ -307,7 +307,7 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 
 ## cloud-torrent
 
-```
+```bash
 docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker/cloud-torrent/downloads:/downloads -v /home/docker/cloud-torrent/torrents:/torrents boypt/cloud-torrent
 ```
 
