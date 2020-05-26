@@ -10,6 +10,10 @@ curl -fsSL https://get.docker.com/ | sh
 
 ## 配置国内镜像源
 
+```json
+{ "debug": true, "experimental": false, "registry-mirrors": ["https://registry.docker-cn.com"] }
+```
+
 https://www.daocloud.io/mirror
 
 ## Docker Compose
