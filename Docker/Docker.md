@@ -11,7 +11,14 @@ curl -fsSL https://get.docker.com/ | sh
 ## 配置国内镜像源
 
 ```json
-{ "debug": true, "experimental": false, "registry-mirrors": ["https://registry.docker-cn.com"] }
+{
+  "registry-mirrors": [
+    "https://29ra4ouu.mirror.aliyuncs.com",
+    "http://hub-mirror.c.163.com",
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://registry.docker-cn.com"
+  ]
+}
 ```
 
 https://www.daocloud.io/mirror
