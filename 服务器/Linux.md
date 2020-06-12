@@ -399,8 +399,15 @@ systemctl restart crond
 
 查看 crontab
 
+```shell
+service crond restart
+```
+
 ```bash
-  cat /etc/crontab
+cat /etc/crontab
+
+cd /var/spool/cron
+ls
 ```
 
 ```bash
@@ -441,3 +448,82 @@ Minute Hour Day Month Dayofweek   command
 ```
 */5 * * * * /bin/sh /docker/renew_cert.sh
 ```
+
+
+
+# telnet
+
+```bash
+telnet 172.18.0.1 22
+```
+
+
+
+# vnstat
+
+## 第一步：安装
+
+centos需要先安装epel源后才能使用yum来安装
+
+```shell
+yum install epel-release -y && yum install -y vnstat
+```
+
+## 第二步：创建监控数据库
+
+这一步可以不执行
+
+```shell
+chmod -R 777 /var/lib/vnstat/
+vnstat -u -i eth0
+```
+
+`eth0`可以改成需要的网卡
+
+## 第三步：启动服务并设置开机启动
+
+```shell
+service vnstat start  
+chkconfig vnstat on  
+```
+
+## 第四步：流量查看命令
+
+完成以上所有操作后，过个10分钟左右就可以用命令看到数据
+
+看每天的流量统计命令：
+
+ ```shell
+vnstat -d
+ ```
+
+看每月的流量统计命令：
+
+```shell
+vnstat -m
+```
+
+
+
+# BBR
+
+## centos8
+
+### 开启
+
+```shell
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+sysctl -p
+```
+
+然后重启一下系统。
+
+### 检查
+
+```shell
+sysctl -n net.ipv4.tcp_congestion_control
+lsmod | grep bbr
+```
+
+如果输出包含 BBR，说明启用成功。

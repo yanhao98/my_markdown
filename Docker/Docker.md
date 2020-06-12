@@ -8,9 +8,32 @@
 curl -fsSL https://get.docker.com/ | sh
 ```
 
+安装依赖 centos8
+
+```shell
+yum install -y yum-utils  device-mapper-persistent-data  lvm2
+yum-config-manager  --add-repo   https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce docker-ce-cli containerd.io
+```
+
+安装新版本containerd.io
+
+```shell
+dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+```
+
+再装剩下两个
+
+```shell
+yum install docker-ce docker-ce-cli
+```
+
+
+
 ## 配置国内镜像源
 
-```json
+```shell
+tee /etc/docker/daemon.json <<-'EOF'
 {
   "registry-mirrors": [
     "https://29ra4ouu.mirror.aliyuncs.com",
@@ -19,6 +42,7 @@ curl -fsSL https://get.docker.com/ | sh
     "https://registry.docker-cn.com"
   ]
 }
+EOF
 ```
 
 https://www.daocloud.io/mirror
@@ -73,10 +97,13 @@ yum list installed | grep docker
 
 # 服务管理
 
-```
-systemctl start docker  #启动docker
-systemctl enable docker #开机启动docker
-systemctl status docker #查看docker状态
+```shell
+#启动docker
+systemctl start docker
+#开机启动docker
+systemctl enable docker
+#查看docker状态
+systemctl status docker
 ```
 
 **systemctl 方式**
@@ -323,4 +350,126 @@ docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker
 ```
 
 
+
+## shadowcosks-libev
+
+BBR
+
+https://ssr.tools/
+
+https://ssr.tools/1217
+
+
+
+[536.html](https://teddysun.com/536.html)
+
+https://hub.docker.com/r/teddysun/shadowsocks-libev
+
+### fast_open 系统配置
+
+https://chenjx.cn/linux-tfo/
+
+```shell
+sysctl -p
+```
+
+### 创建配置文件
+
+```shell
+mkdir /etc/shadowsocks-libev
+cat > /etc/shadowsocks-libev/config.json <<EOF
+{
+    "server":"0.0.0.0",
+    "server_port":9000,
+    "password":"VPNbyYanhao",
+    "timeout":300,
+    "method":"chacha20-ietf-poly1305",
+    "fast_open":false,
+    "nameserver":"8.8.8.8",
+    "mode":"tcp_and_udp",
+    "plugin":"obfs-server",
+    "plugin_opts":"obfs=http"
+}
+EOF
+```
+
+### 启动
+
+```shell
+docker run -d  -p 4848:9000/tcp -p 4848:9000/udp --name ss --restart=always -v /etc/shadowsocks-libev:/etc/shadowsocks-libev teddysun/shadowsocks-libev
+```
+
+```shell
+docker run -d --name ss --restart always --net host -v /etc/shadowsocks-libev:/etc/shadowsocks-libev teddysun/shadowsocks-libev
+```
+
+```shell
+docker logs ss
+```
+
+
+
+## l2tp
+
+hwdsl2/ipsec-vpn-server
+
+https://hub.docker.com/r/teddysun/l2tp
+
+### 加载 IPsec af_key 内核模块
+
+首先需要在 Docker 主机上加载 IPsec af_key 内核模块
+
+```bash
+sudo modprobe af_key
+```
+
+### 创建配置文件
+
+```shell
+cat > /etc/l2tp.env <<EOF
+VPN_IPSEC_PSK=YanhaoVPNPSK
+VPN_USER=yanhao
+VPN_PASSWORD=vpnpass
+VPN_PUBLIC_IP=
+VPN_L2TP_NET=
+VPN_L2TP_LOCAL=
+VPN_L2TP_REMOTE=
+VPN_XAUTH_NET=
+VPN_XAUTH_REMOTE=
+VPN_DNS1=
+VPN_DNS2=
+VPN_SHA2_TRUNCBUG=
+EOF
+```
+
+```shell
+cat > /etc/l2tp.env <<EOF
+VPN_IPSEC_PSK=YanhaoVPNPSK
+VPN_USER=yanhao
+VPN_PASSWORD=vpnpass
+EOF
+```
+
+```shell
+docker run \
+    --name l2tp \
+    --env-file /etc/l2tp.env \
+    -p 500:500/udp \
+    -p 4500:4500/udp \
+    -v /lib/modules:/lib/modules:ro \
+    -d --privileged \
+    --restart=always \
+    hwdsl2/ipsec-vpn-server
+    
+    teddysun/l2tp
+```
+
+```shell
+docker logs l2tp -f
+```
+
+```shell
+docker stop l2tp
+docker rm l2tp
+```
 
