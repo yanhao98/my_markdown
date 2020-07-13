@@ -25,7 +25,7 @@ dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/co
 再装剩下两个
 
 ```shell
-yum install docker-ce docker-ce-cli
+yum install -y docker-ce docker-ce-cli
 ```
 
 
@@ -92,6 +92,16 @@ yum list installed | grep docker
 ![image-20200425094839457](https://i.loli.net/2020/04/25/zwpWQkU6yV5OcKh.png)
 
 
+
+
+
+# 升级
+
+## 卸载
+
+```shell
+yum remove $(rpm -qa | grep docker)
+```
 
 
 
@@ -290,6 +300,23 @@ Commands:
 
 
 
+# 卷标
+
+```shell
+Usage:	docker volume COMMAND
+
+Manage volumes
+
+Commands:
+  create      Create a volume
+  inspect     Display detailed information on one or more volumes
+  ls          List volumes
+  prune       Remove all unused local volumes
+  rm          Remove one or more volumes
+```
+
+
+
 # 日志
 
 ```bash
@@ -333,6 +360,49 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 
 
 
+# Volumes迁移
+
+## 备份
+
+> --volumes-from 后面是容器名字
+>
+> 备份容器`sentry_postgres_1`内的目录：`/var/lib/postgresql/data`
+
+```shell
+mkdir backup
+cd backup
+docker run --rm -it \
+    --volumes-from sentry_postgres_1 \
+    -v$(pwd):/backup \
+    ubuntu \
+    tar cvf /backup/data.tar /var/lib/postgresql/data
+```
+
+## 恢复
+
+**恢复的目标**
+
+```shell
+docker run -it --name vol_bck -v /data ubuntu /bin/bash
+```
+
+执行恢复
+
+> 修改 `容器名` 和 `tar包名`就可以了
+>
+> -C 后面的目录不用修改
+
+```shell
+cd backup
+docker run -it --rm \
+    --volumes-from sentry_postgres_1 \
+    -v $(pwd):/backup \
+    ubuntu \
+    tar xvf /backup/data.tar -C /
+```
+
+
+
 # 镜像
 
 ## MySQL
@@ -369,10 +439,6 @@ https://hub.docker.com/r/teddysun/shadowsocks-libev
 
 https://chenjx.cn/linux-tfo/
 
-```shell
-sysctl -p
-```
-
 ### 创建配置文件
 
 ```shell
@@ -384,7 +450,7 @@ cat > /etc/shadowsocks-libev/config.json <<EOF
     "password":"VPNbyYanhao",
     "timeout":300,
     "method":"chacha20-ietf-poly1305",
-    "fast_open":false,
+    "fast_open":true,
     "nameserver":"8.8.8.8",
     "mode":"tcp_and_udp",
     "plugin":"obfs-server",
@@ -472,4 +538,3 @@ docker logs l2tp -f
 docker stop l2tp
 docker rm l2tp
 ```
-

@@ -371,11 +371,23 @@ echo >/var/log/wtmp
 top -d 1
 ```
 
-按cpu排序：
+
+
+## 进程排序
+
+### 按cpu排序
+
 top命令后，输入**大写的P**
 
-按内存排序：
+### 按内存排序
+
 top命令后，输入**大写的M**
+
+
+
+## 单位切换
+
+top命令后，输入**大写的E**
 
 
 
@@ -483,8 +495,8 @@ vnstat -u -i eth0
 ## 第三步：启动服务并设置开机启动
 
 ```shell
-service vnstat start  
-chkconfig vnstat on  
+service vnstat start
+chkconfig vnstat on
 ```
 
 ## 第四步：流量查看命令
@@ -527,3 +539,51 @@ lsmod | grep bbr
 ```
 
 如果输出包含 BBR，说明启用成功。
+
+
+
+## [魔改BBR/锐速](https://ssr.tools/1217)
+
+```shell
+wget --no-check-certificate -O tcp.sh https://github.com/cx9208/Linux-NetSpeed/raw/master/tcp.sh && chmod +x tcp.sh && ./tcp.sh
+```
+
+
+
+# yum
+
+```shell
+yum -y update
+# 升级所有包bai同du时也升级软件和系统内核；
+
+yum -y upgrade
+# 只升级所有包，不升级软件和系统内核。
+```
+
+
+
+/etc/resolv.conf
+
+滴滴云
+
+```
+nameserver 100.64.8.2
+nameserver 100.64.8.1
+```
+
+```
+nameserver 114.114.114.114
+```
+
+```
+service network restart
+```
+
+
+
+## 本地安装
+
+```shell
+yum install /path/to/package.rpm
+```
+

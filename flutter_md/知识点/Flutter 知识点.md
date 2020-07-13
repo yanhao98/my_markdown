@@ -47,6 +47,21 @@ class PageC extends StatelessWidget {
 
 
 
+# 收起键盘
+
+```dart
+  void _hideKeyboard(BuildContext context) {
+    final currentFocus = FocusScope.of(context);
+
+    if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
+      FocusManager.instance.primaryFocus.unfocus();
+    }
+  }
+```
+
+
+
+
 # Podfile
 
 https://github.com/flutter/flutter/blob/master/packages/flutter_tools/templates/cocoapods/Podfile-ios-objc
