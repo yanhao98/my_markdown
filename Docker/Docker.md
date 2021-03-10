@@ -421,6 +421,79 @@ docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker
 
 
 
+## V2ray
+
+https://hub.docker.com/r/teddysun/v2ray
+
+### 配置生成
+
+https://tools.sprov.xyz/v2ray/
+
+#### **云免配置**
+
+```shell
+mkdir -p /etc/v2ray
+```
+
+```
+cat > /etc/v2ray/config.json <<EOF
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbound": {
+    "port": 80,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "3cfe7c4c-b9d9-45b0-d48e-020534c6d7d1",
+          "alterId": 64,
+          "level": 1
+        }
+      ]
+    },
+    "streamSettings": {
+      "network": "tcp",
+      "httpSettings": {
+        "path": "/"
+      },
+      "tcpSettings": {
+        "header": {
+          "type": "http",
+          "response": {
+            "version": "1.1",
+            "status": "200",
+            "reason": "OK",
+            "headers": {
+              "Content-Type": ["application/octet-stream", "application/x-msdownload", "text/html", "application/x-shockwave-flash"],
+              "Transfer-Encoding": ["chunked"],
+              "Connection": ["keep-alive"],
+              "Pragma": "no-cache"
+            }
+          }
+        }
+      }
+    }
+  },
+  "outbound": {
+    "protocol": "freedom",
+    "settings": {}
+  }
+}
+EOF
+```
+
+```
+docker run -d -p 80:80 --name v2ray --restart=always -v /etc/v2ray:/etc/v2ray teddysun/v2ray
+```
+
+### 更新pac脚本
+
+https://github.com/Cenmrev/V2RayX/issues/319
+
+
+
 ## shadowcosks-libev
 
 BBR
@@ -436,6 +509,10 @@ https://ssr.tools/1217
 https://hub.docker.com/r/teddysun/shadowsocks-libev
 
 ### fast_open 系统配置
+
+```
+echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.conf
+```
 
 https://chenjx.cn/linux-tfo/
 
@@ -472,6 +549,12 @@ docker run -d --name ss --restart always --net host -v /etc/shadowsocks-libev:/e
 ```shell
 docker logs ss
 ```
+
+
+
+### Adguard 搭配
+
+https://kb.adguard.com/zh/macos/solving-problems/big-sur-issues#shadowsocks
 
 
 

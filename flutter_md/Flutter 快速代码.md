@@ -8,7 +8,12 @@ if (snapshot.connectionState != ConnectionState.done) {
 } else {
   if (snapshot.hasError) {
     // 加载出错
-    return Center(child: Text(snapshot.error.toString()));
+    return GestureDetector(
+              onTap: () {
+                //TODO:
+              },
+              child: Center(child: Text('加载出错，点击重试')),
+            );
   } else {
     // 加载成功
     return Text(snapshot.data.toString());
