@@ -190,6 +190,16 @@ mv /tmp/d1/test.txt /tmp/n1
 
 
 
+## 写文件
+
+```shell
+cat > /etc/v2ray/config.json <<EOF
+文件内容
+EOF
+```
+
+
+
 # 配置 RSA 登录
 
 生成`SSH`秘钥
@@ -519,6 +529,30 @@ vnstat -m
 
 # BBR
 
+## teddysun
+
+```
+wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh && chmod +x bbr.sh && ./bbr.sh
+```
+
+```
+sysctl net.ipv4.tcp_congestion_control
+```
+
+https://ssr.tools/199
+
+
+
+## [魔改BBR/锐速](https://ssr.tools/1217)
+
+```shell
+wget --no-check-certificate -O tcp.sh https://github.com/cx9208/Linux-NetSpeed/raw/master/tcp.sh && chmod +x tcp.sh && ./tcp.sh
+```
+
+94ish.me
+
+
+
 ## centos8
 
 ### 开启
@@ -542,13 +576,33 @@ lsmod | grep bbr
 
 
 
-## [魔改BBR/锐速](https://ssr.tools/1217)
 
-```shell
-wget --no-check-certificate -O tcp.sh https://github.com/cx9208/Linux-NetSpeed/raw/master/tcp.sh && chmod +x tcp.sh && ./tcp.sh
+
+# 锐速
+
+锐速：https://ssr.tools/533
+
+```
+wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
 ```
 
-94ish.me
+重启锐速：
+
+```
+/serverspeeder/bin/serverSpeeder.sh restart
+```
+
+锐速状态：
+
+```
+/serverspeeder/bin/serverSpeeder.sh status
+```
+
+卸载锐速：
+
+```
+chattr -i /serverspeeder/etc/apx* && /serverspeeder/bin/serverSpeeder.sh uninstall -f
+```
 
 
 
@@ -587,5 +641,25 @@ service network restart
 
 ```shell
 yum install /path/to/package.rpm
+```
+
+
+
+
+
+# 时间
+
+https://blog.csdn.net/m0_37779570/article/details/81979263
+
+查看系统时间
+
+```
+date
+```
+
+设置系统时区为上海
+
+```
+timedatectl set-timezone Asia/Shanghai
 ```
 

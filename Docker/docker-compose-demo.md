@@ -25,3 +25,47 @@ networks:
     external: true
 ```
 
+
+
+```yaml
+version: "3.3"
+services:
+  nginx:
+    image: nginx
+    # container_name: nginx
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./nginx/log:/var/log/nginx
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./letsencrypt:/letsencrypt
+  mysql:
+    image: mysql:5.7.30
+    # container_name: mysql
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: n2S6q62gIAauaECW
+    ports:
+      - 3306:3306
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mysql/data:/var/lib/mysql
+  php:
+    # container_name: php
+    image: php:fpm
+    environment:
+      TZ: Asia/Shanghai
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./nginx/wwwroot:/wwwroot
+      - ./php/config.d:/usr/local/etc/php/conf.d
+
+```
+

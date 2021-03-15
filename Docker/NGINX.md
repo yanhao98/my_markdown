@@ -32,6 +32,8 @@ nginx -s reload
 
 # 配置文件
 
+https://xuexb.github.io/learn-nginx/
+
 ```nginx
 server {
   listen 80;

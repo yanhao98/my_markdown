@@ -6,7 +6,15 @@
 
 ```bash
 curl -fsSL https://get.docker.com/ | sh
+#启动docker
+systemctl start docker
+#开机启动docker
+systemctl enable docker
+#查看docker状态
+systemctl status docker
 ```
+
+
 
 安装依赖 centos8
 
@@ -52,7 +60,9 @@ https://www.daocloud.io/mirror
 https://docs.docker.com/compose/install/
 
 ```bash
-sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
+chmod +x /usr/local/bin/docker-compose;\
+docker-compose -version
 ```
 
 ### pip 安装 Docker Compose
@@ -83,7 +93,7 @@ GID="$(id -g)" docker-compose config
 
 
 
-## 卸载
+# 卸载
 
 ```bash
 yum list installed | grep docker
@@ -93,12 +103,6 @@ yum list installed | grep docker
 
 
 
-
-
-# 升级
-
-## 卸载
-
 ```shell
 yum remove $(rpm -qa | grep docker)
 ```
@@ -106,15 +110,6 @@ yum remove $(rpm -qa | grep docker)
 
 
 # 服务管理
-
-```shell
-#启动docker
-systemctl start docker
-#开机启动docker
-systemctl enable docker
-#查看docker状态
-systemctl status docker
-```
 
 **systemctl 方式**
 
@@ -319,6 +314,8 @@ Commands:
 
 # 日志
 
+https://tecadmin.net/truncate-docker-container-logfile/
+
 ```bash
 $ docker logs [OPTIONS] CONTAINER
   Options:
@@ -419,94 +416,127 @@ docker run -it --rm \
 docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker/cloud-torrent/downloads:/downloads -v /home/docker/cloud-torrent/torrents:/torrents boypt/cloud-torrent
 ```
 
+https://github.com/ngosang/trackerslist/blob/master/trackers_all.txt
 
+https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt
 
 ## V2ray
 
-https://hub.docker.com/r/teddysun/v2ray
+[检查服务器是否被墙](https://www.vps234.com/ipchecker/)
+
+https://guide.v2fly.org/app/docker-deploy-v2ray.html
 
 ### 配置生成
 
 https://tools.sprov.xyz/v2ray/
 
-#### **云免配置**
-
 ```shell
 mkdir -p /etc/v2ray
 ```
 
+#### **云免配置**
+
 ```
 cat > /etc/v2ray/config.json <<EOF
 {
-  "log": {
-    "loglevel": "warning"
-  },
-  "inbound": {
-    "port": 80,
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
-        {
-          "id": "3cfe7c4c-b9d9-45b0-d48e-020534c6d7d1",
-          "alterId": 64,
-          "level": 1
-        }
-      ]
-    },
-    "streamSettings": {
-      "network": "tcp",
-      "httpSettings": {
-        "path": "/"
+  "inbounds": [
+    {
+      "port": 80,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "3cfe7c4c-b9d9-45b0-d48e-020534c6d7d1",
+            "level": 1,
+            "alterId": 64
+          }
+        ]
       },
-      "tcpSettings": {
-        "header": {
-          "type": "http",
-          "response": {
-            "version": "1.1",
-            "status": "200",
-            "reason": "OK",
-            "headers": {
-              "Content-Type": ["application/octet-stream", "application/x-msdownload", "text/html", "application/x-shockwave-flash"],
-              "Transfer-Encoding": ["chunked"],
-              "Connection": ["keep-alive"],
-              "Pragma": "no-cache"
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {
+          "header": {
+            "type": "http",
+            "response": {
+              "version": "1.1",
+              "status": "200",
+              "reason": "OK",
+              "headers": {
+                "Content-Type": ["application/octet-stream", "application/x-msdownload", "text/html", "application/x-shockwave-flash"],
+                "Transfer-Encoding": ["chunked"],
+                "Connection": ["keep-alive"],
+                "Pragma": "no-cache"
+              }
             }
           }
         }
       }
     }
-  },
-  "outbound": {
-    "protocol": "freedom",
-    "settings": {}
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "routing": {
+    "strategy": "rules",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",
+          "ip": ["geoip:private"],
+          "outboundTag": "blocked"
+        }
+      ]
+    }
   }
 }
 EOF
 ```
 
-```
+### RUN
+
+```shell
 docker run -d -p 80:80 --name v2ray --restart=always -v /etc/v2ray:/etc/v2ray teddysun/v2ray
 ```
 
-### 更新pac脚本
+```shell
+docker run -d --name v2ray --restart=always -v /etc/v2ray:/etc/v2ray -p 80:80 v2fly/v2fly-core  v2ray -config=/etc/v2ray/config.json
+
+docker run -d --name v2ray --network=host --restart=always -v /etc/v2ray:/etc/v2ray v2fly/v2fly-core  v2ray -config=/etc/v2ray/config.json
+```
+
+```
+docker exec v2ray cat /etc/v2ray/config.json
+```
+
+```
+docker logs v2ray -f
+```
+
+
+
+### 客户端更新pac脚本
 
 https://github.com/Cenmrev/V2RayX/issues/319
 
 
 
+### NGINX
+
+这个方案可以共用80端口。
+
+https://github.com/wubaiqing/v2ray-docker-compose/blob/master/docker-compose.yml
+
+
+
 ## shadowcosks-libev
-
-BBR
-
-https://ssr.tools/
-
-https://ssr.tools/1217
-
-
-
-[536.html](https://teddysun.com/536.html)
-
-https://hub.docker.com/r/teddysun/shadowsocks-libev
 
 ### fast_open 系统配置
 

@@ -17,3 +17,11 @@ https://chrome.google.com/webstore/detail/neatdownloadmanager-exten/cpcifbdmkopo
 P427L-9Y552-5433E-8DSR3-58Z68（MAC）
 
 2DNRX-V3PNK-TEGYN-DR01D-9UGGT	https://macwk.com/soft/proxifier
+
+
+
+# Adguard
+
+淘宝买的注册码
+
+4G764SCYFH
