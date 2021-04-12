@@ -21,3 +21,35 @@ if (snapshot.connectionState != ConnectionState.done) {
 }
 ```
 
+
+
+# TextStyle
+
+```dart
+ style: TextStyle(
+   color: Colors.white,
+   fontSize: 16,
+   fontWeight: FontWeight.w500,
+ ),
+```
+
+```dart
+ Text(
+   'XX',
+   style: TextStyle(
+   color: Color(0xFFE6E6E6),
+   fontSize: 14,
+   fontWeight: FontWeight.w500,
+   ),
+   textAlign: TextAlign.center,
+ ),
+```
+
+
+
+# 占位Icon
+
+```
+Icon(Icons.grid_view, size: 35, color: Colors.white),
+```
+

@@ -1,3 +1,11 @@
+# 刷新DNS缓存
+
+```
+sudo killall -HUP mDNSResponder
+```
+
+
+
 # 设置终端代理
 
 ```bash
@@ -54,3 +62,8 @@ source .zshrc
 ```shell
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
+
+```shell
+brew upgrade
+```
+

@@ -126,6 +126,8 @@ location ~ /.well-known {
 
 ## 2.颁发签证
 
+**注意目录**
+
 ```bash
 docker run -it --rm --name certbot \
 -v "/projects/LNMP/letsencrypt/etc:/etc/letsencrypt" \
