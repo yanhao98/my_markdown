@@ -99,7 +99,7 @@ GID="$(id -g)" docker-compose config
 yum list installed | grep docker
 ```
 
-![image-20200425094839457](https://i.loli.net/2020/04/25/zwpWQkU6yV5OcKh.png)
+![image-20200425094839457](http://mdpic.yanhao.ren/ea58f8723ba2f9cf78b92810ef32d49f.png)
 
 
 
@@ -406,7 +406,7 @@ docker run -it --rm \
 
 自定义配置文件
 
-![image-20200415115422979](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdubacwhujj30na02ut9t.jpg)
+![image-20200415115422979](http://mdpic.yanhao.ren/69f664dc27b7238ad73839651381f97a.jpg)
 
 
 

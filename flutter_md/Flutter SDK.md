@@ -31,7 +31,7 @@ flutter pub outdated
 dart pub get
 ```
 
-![image-20200507141836100](https://i.loli.net/2020/05/07/lPU82kNTWfgzLpC.png)
+![image-20200507141836100](http://mdpic.yanhao.ren/c5d40e74e87dae22a4da6e328c5c1b2e.png)
 
 ```
 flutter channel master

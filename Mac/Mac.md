@@ -24,7 +24,7 @@ cip.cc
 ip.sb
 ```
 
-![image-20200406125736016](https://tva1.sinaimg.cn/large/00831rSTgy1gdjyjbap23j315e072q6g.jpg)
+![image-20200406125736016](http://mdpic.yanhao.ren/0ce8473b38f8905bc4b91c8a4c657eab.jpg)
 
 
 
@@ -40,7 +40,7 @@ curl ip.sb
 -w '\ntime_connect\t\t%{time_connect}\ntime_starttransfer\t%{time_starttransfer}\ntime_total\t\t%{time_total}\n'
 ```
 
-![image-20200418152743251](https://i.loli.net/2020/04/18/pVdosGLz6XngZAC.png)
+![image-20200418152743251](http://mdpic.yanhao.ren/25403c6dbe5b875f2b17ea6a155fe137.png)
 
 
 

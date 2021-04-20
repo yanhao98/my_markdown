@@ -37,9 +37,9 @@ https://meilbn.com/2019/08/23/install-reveal2loader-on-jailbreak-device-ios12/#j
 
 ## AFC2
 
-![image-20200411154833975](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpvkr2xpej31ee08admd.jpg)
+![image-20200411154833975](http://mdpic.yanhao.ren/38d7ccdb1dfa0c8adfd742d203a9b292.jpg)
 
-![image-20200411154558950](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdpvi3p1olj309a023t8x.jpg)
+![image-20200411154558950](http://mdpic.yanhao.ren/88eb4c680413750183dcaa194a5b73d8.jpg)
 
 ## iFile
 

@@ -324,7 +324,7 @@ sudo netstat -lnpt
 sudo pwdx 31996
 ```
 
-![image-20200415120509724](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdublj6n7xj30h601wjrm.jpg)
+![image-20200415120509724](http://mdpic.yanhao.ren/6a3c5a0d8cf208f6649fce7503ac095e.jpg)
 
 
 
