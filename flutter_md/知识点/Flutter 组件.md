@@ -578,6 +578,10 @@ https://juejin.im/post/5c4c4e22f265da6174652fb4
 
 *检测手势*
 
+```dart
+behavior: HitTestBehavior.opaque,
+```
+
 
 
 # 路由组件
