@@ -1,4 +1,4 @@
-# future builder
+## future builder
 
 
 ```dart
@@ -23,7 +23,7 @@ if (snapshot.connectionState != ConnectionState.done) {
 
 
 
-# TextStyle
+## TextStyle
 
 ```dart
  style: TextStyle(
@@ -47,9 +47,23 @@ if (snapshot.connectionState != ConnectionState.done) {
 
 
 
-# 占位Icon
+## 占位Icon
 
 ```
 Icon(Icons.grid_view, size: 35, color: Colors.white),
+```
+
+
+
+## debug persistentFooterButtons
+
+```dart
+    persistentFooterButtons: [
+        OutlinedButton(
+            onPressed: () {
+              AppController.to.fetchContractTypeList();
+            },
+            child: Text('重新拉取 List'))
+      ],
 ```
 

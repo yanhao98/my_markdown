@@ -55,6 +55,37 @@ open .zshrc
 source .zshrc
 ```
 
+```
+# source .zshrc
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+# =========================================    flutter start
+
+# 🐞 dev SDK
+# export PATH=/Users/yanhao/development/flutter_sdk_dev/bin:$PATH
+# ✅ stable SDK
+export PATH=/Users/yanhao/development/flutter_sdk_stable/bin:$PATH
+
+# =========================================    flutter end
+
+# export PUB_HOSTED_URL=https://pub.flutter-io.cn
+# export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+
+
+NO_PROXY=localhost,127.0.0.1
+# HomeBrew
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
+export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+# HomeBrew END
+
+# 📱adb
+export PATH="/Users/yanhao/Library/Android/sdk/platform-tools:$PATH"
+
+```
+
 
 
 # 安装brew

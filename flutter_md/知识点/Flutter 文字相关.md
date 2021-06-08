@@ -20,3 +20,4 @@ double paintWidthWithTextStyle(TextStyle style) {
 700 - Bold
 800 - Extra Bold (Ultra Bold)
 900 - Black (Heavy)
+

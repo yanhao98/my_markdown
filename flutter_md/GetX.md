@@ -6,12 +6,25 @@ https://fluttertutorial.in/getx-in-flutter/
 
  什么时候用obx,getx,getBuilder
 
+## ValueBuilder
+
+```dart
+ValueBuilder<bool>(
+  initialValue: false,
+  builder: (value, updateFn) => Switch(
+    value: value,
+    onChanged: updateFn, // same signature! you could use ( newValue ) => updateFn( newValue )
+  ),
+  // if you need to call something outside the builder method.
+  onUpdate: (value) => print("Value updated: $value"),
+  onDispose: () => print("Widget unmounted"),
+),
+```
 
 
 
 
-
-### Workers
+## Workers
 
 Workers将协助你在事件发生时触发特定的回调。
 
