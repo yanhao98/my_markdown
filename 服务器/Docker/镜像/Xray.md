@@ -2,6 +2,8 @@
 
 ## 配置文件
 
+[XTLS/Xray-examples: Some examples of uses for Xray-core. (github.com)](https://github.com/XTLS/Xray-examples)
+
 You **must create a configuration file** `/etc/xray/config.json` in host at first:
 
 ```
@@ -30,10 +32,6 @@ cat > /etc/xray/config.json <<EOF
                 "fallbacks": [
                     {
                         "dest": 33222
-                    },
-                    {
-                        "alpn": "h2",
-                        "dest": 33223
                     }
                 ]
             },
@@ -91,15 +89,7 @@ docker exec xray cat /etc/xrayconfig.json
 ```
 
 ```shell
-docker logs xray -f
+docker logs xray
 ```
 
 **Warning**: The port number must be same as configuration and opened in firewall.
-
-
-
-## 测速
-
-```
-docker run -d -p 6688:80 ilemonrain/html5-speedtest:alpine
-```
