@@ -1,4 +1,14 @@
-[ssh_config和sshd_config区别](https://www.cnblogs.com/panda2046/p/5933498.html)
+# 系统查看
+
+## 磁盘空间查看
+
+显示磁盘分区上的可使用的磁盘空间
+
+```shell
+df -h
+```
+
+
 
 # 用户/用户组
 
@@ -527,30 +537,6 @@ vnstat -m
 
 
 
-# BBR
-
-## teddysun
-
-```
-wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh && chmod +x bbr.sh && ./bbr.sh
-```
-
-```
-sysctl net.ipv4.tcp_congestion_control
-```
-
-https://ssr.tools/199
-
-
-
-## [魔改BBR/锐速](https://ssr.tools/1217)
-
-```shell
-wget --no-check-certificate -O tcp.sh https://github.com/cx9208/Linux-NetSpeed/raw/master/tcp.sh && chmod +x tcp.sh && ./tcp.sh
-```
-
-94ish.me
-
 
 
 ## centos8
@@ -573,36 +559,6 @@ lsmod | grep bbr
 ```
 
 如果输出包含 BBR，说明启用成功。
-
-
-
-
-
-# 锐速
-
-锐速：https://ssr.tools/533
-
-```
-wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
-```
-
-重启锐速：
-
-```
-/serverspeeder/bin/serverSpeeder.sh restart
-```
-
-锐速状态：
-
-```
-/serverspeeder/bin/serverSpeeder.sh status
-```
-
-卸载锐速：
-
-```
-chattr -i /serverspeeder/etc/apx* && /serverspeeder/bin/serverSpeeder.sh uninstall -f
-```
 
 
 
@@ -635,17 +591,11 @@ nameserver 114.114.114.114
 service network restart
 ```
 
-
-
 ## 本地安装
 
 ```shell
 yum install /path/to/package.rpm
 ```
-
-
-
-
 
 # 时间
 

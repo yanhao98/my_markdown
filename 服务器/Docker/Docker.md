@@ -4,39 +4,47 @@
 
 ## 安装docker
 
-```bash
+```shell
 curl -fsSL https://get.docker.com/ | sh
-#启动docker
+```
+
+启动docker
+
+```shell
 systemctl start docker
-#开机启动docker
+```
+
+开机启动docker
+
+```
 systemctl enable docker
-#查看docker状态
+```
+
+查看docker状态
+
+```
 systemctl status docker
 ```
 
 
 
-安装依赖 centos8
+守护进程重启
 
 ```shell
-yum install -y yum-utils  device-mapper-persistent-data  lvm2
-yum-config-manager  --add-repo   https://download.docker.com/linux/centos/docker-ce.repo
-yum install docker-ce docker-ce-cli containerd.io
+systemctl daemon-reload
 ```
 
-安装新版本containerd.io
+重启docker服务
 
 ```shell
-dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+systemctl restart docker
 ```
 
-再装剩下两个
+关闭docker
 
 ```shell
-yum install -y docker-ce docker-ce-cli
+systemctl stop docker
 ```
-
-
 
 ## 配置国内镜像源
 
@@ -65,22 +73,6 @@ chmod +x /usr/local/bin/docker-compose;\
 docker-compose -version
 ```
 
-### pip 安装 Docker Compose
-
-```bash
-yum -y install epel-release
- 
-yum -y install python-pip
- 
-#升级
-pip install --upgrade pip
-
-pip install docker-compose
-docker-compose -version
-```
-
-
-
 ### docker-compose 使用
 
 ```
@@ -105,30 +97,6 @@ yum list installed | grep docker
 
 ```shell
 yum remove $(rpm -qa | grep docker)
-```
-
-
-
-# 服务管理
-
-**systemctl 方式**
-
-守护进程重启
-
-```
-systemctl daemon-reload
-```
-
- 重启docker服务
-
-```
-systemctl restart docker
-```
-
- 关闭docker
-
-```
-systemctl stop docker
 ```
 
 
@@ -310,6 +278,47 @@ Commands:
   rm          Remove one or more volumes
 ```
 
+# Volumes迁移
+
+## 备份
+
+> --volumes-from 后面是容器名字
+>
+> 备份容器`sentry_postgres_1`内的目录：`/var/lib/postgresql/data`
+
+```shell
+mkdir backup
+cd backup
+docker run --rm -it \
+    --volumes-from sentry_postgres_1 \
+    -v$(pwd):/backup \
+    ubuntu \
+    tar cvf /backup/data.tar /var/lib/postgresql/data
+```
+
+## 恢复
+
+**恢复的目标**
+
+```shell
+docker run -it --name vol_bck -v /data ubuntu /bin/bash
+```
+
+执行恢复
+
+> 修改 `容器名` 和 `tar包名`就可以了
+>
+> -C 后面的目录不用修改
+
+```shell
+cd backup
+docker run -it --rm \
+    --volumes-from sentry_postgres_1 \
+    -v $(pwd):/backup \
+    ubuntu \
+    tar xvf /backup/data.tar -C /
+```
+
 
 
 # 日志
@@ -357,47 +366,6 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 
 
 
-# Volumes迁移
-
-## 备份
-
-> --volumes-from 后面是容器名字
->
-> 备份容器`sentry_postgres_1`内的目录：`/var/lib/postgresql/data`
-
-```shell
-mkdir backup
-cd backup
-docker run --rm -it \
-    --volumes-from sentry_postgres_1 \
-    -v$(pwd):/backup \
-    ubuntu \
-    tar cvf /backup/data.tar /var/lib/postgresql/data
-```
-
-## 恢复
-
-**恢复的目标**
-
-```shell
-docker run -it --name vol_bck -v /data ubuntu /bin/bash
-```
-
-执行恢复
-
-> 修改 `容器名` 和 `tar包名`就可以了
->
-> -C 后面的目录不用修改
-
-```shell
-cd backup
-docker run -it --rm \
-    --volumes-from sentry_postgres_1 \
-    -v $(pwd):/backup \
-    ubuntu \
-    tar xvf /backup/data.tar -C /
-```
-
 
 
 # 镜像
@@ -410,15 +378,7 @@ docker run -it --rm \
 
 
 
-## cloud-torrent
 
-```bash
-docker run -d -p 3000:3000 --name cloud-torrent --restart=always -v /home/docker/cloud-torrent/downloads:/downloads -v /home/docker/cloud-torrent/torrents:/torrents boypt/cloud-torrent
-```
-
-https://github.com/ngosang/trackerslist/blob/master/trackers_all.txt
-
-https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt
 
 ## V2ray
 
