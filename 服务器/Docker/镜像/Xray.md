@@ -81,7 +81,7 @@ Or some examples of uses for Xray-core https://github.com/XTLS/Xray-examples
 There is an example to start a container that listen on port `9000`, run as a Xray server like below:
 
 ```shell
-docker run -d -p 80:80 --name xray --restart=always -v /etc/xray:/etc/xray teddysun/xray
+docker run -d -p 443:443 --name xray --restart=always -v /etc/xray:/etc/xray teddysun/xray && docker logs xray
 ```
 
 ```shell
@@ -90,6 +90,12 @@ docker exec xray cat /etc/xrayconfig.json
 
 ```shell
 docker logs xray
+```
+
+**删除**
+
+```shell
+docker stop xray && docker rm xray
 ```
 
 **Warning**: The port number must be same as configuration and opened in firewall.

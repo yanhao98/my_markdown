@@ -1,16 +1,12 @@
 # 安装
 
-## Mac
-
 ```shell
 brew install node
 ```
 
 
 
-
-
-# live-server
+# Live Server
 
 **在本地开启服务器**
 

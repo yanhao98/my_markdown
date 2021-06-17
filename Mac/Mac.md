@@ -15,7 +15,7 @@ export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087
 检查
 
 ```
-curl --socks5 127.0.0.1:1086 ipinfo.io/json
+curl --socks5 127.0.0.1:1081 ipinfo.io/json
 
 curl ipinfo.io/json
 

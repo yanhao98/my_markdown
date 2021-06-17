@@ -1,12 +1,12 @@
-```
-codesign --force --deep --sign - /Applications/Adguard.app
-```
+
+
+[MacWk - 精品mac软件下载](https://macwk.com/)
 
 
 
 # [NeatDownloadManager](http://www.neatdownloadmanager.com/index.php/en/)
 
-https://chrome.google.com/webstore/detail/neatdownloadmanager-exten/cpcifbdmkopohnnofedkjghjiclmhdah
+浏览器插件：https://chrome.google.com/webstore/detail/neatdownloadmanager-exten/cpcifbdmkopohnnofedkjghjiclmhdah
 
 
 
@@ -25,3 +25,4 @@ P427L-9Y552-5433E-8DSR3-58Z68（MAC）
 淘宝买的注册码
 
 4G764SCYFH
+
