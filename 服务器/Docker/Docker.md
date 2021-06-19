@@ -11,18 +11,18 @@ curl -fsSL https://get.docker.com/ | sh
 启动docker
 
 ```shell
-systemctl start docker
+systemctl start docker && systemctl enable docker && systemctl status docker
 ```
 
 开机启动docker
 
-```
+```shell
 systemctl enable docker
 ```
 
 查看docker状态
 
-```
+```shell
 systemctl status docker
 ```
 
@@ -375,124 +375,6 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 自定义配置文件
 
 ![image-20200415115422979](http://mdpic.yanhao.ren/69f664dc27b7238ad73839651381f97a.jpg)
-
-
-
-
-
-## V2ray
-
-[检查服务器是否被墙](https://www.vps234.com/ipchecker/)
-
-https://guide.v2fly.org/app/docker-deploy-v2ray.html
-
-### 配置生成
-
-https://tools.sprov.xyz/v2ray/
-
-```shell
-mkdir -p /etc/v2ray
-```
-
-#### **云免配置**
-
-```
-cat > /etc/v2ray/config.json <<EOF
-{
-  "inbounds": [
-    {
-      "port": 80,
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "3cfe7c4c-b9d9-45b0-d48e-020534c6d7d1",
-            "level": 1,
-            "alterId": 64
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {
-          "header": {
-            "type": "http",
-            "response": {
-              "version": "1.1",
-              "status": "200",
-              "reason": "OK",
-              "headers": {
-                "Content-Type": ["application/octet-stream", "application/x-msdownload", "text/html", "application/x-shockwave-flash"],
-                "Transfer-Encoding": ["chunked"],
-                "Connection": ["keep-alive"],
-                "Pragma": "no-cache"
-              }
-            }
-          }
-        }
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "protocol": "freedom",
-      "settings": {}
-    },
-    {
-      "protocol": "blackhole",
-      "settings": {},
-      "tag": "blocked"
-    }
-  ],
-  "routing": {
-    "strategy": "rules",
-    "settings": {
-      "rules": [
-        {
-          "type": "field",
-          "ip": ["geoip:private"],
-          "outboundTag": "blocked"
-        }
-      ]
-    }
-  }
-}
-EOF
-```
-
-### RUN
-
-```shell
-docker run -d -p 80:80 --name v2ray --restart=always -v /etc/v2ray:/etc/v2ray teddysun/v2ray
-```
-
-```shell
-docker run -d --name v2ray --restart=always -v /etc/v2ray:/etc/v2ray -p 80:80 v2fly/v2fly-core  v2ray -config=/etc/v2ray/config.json
-
-docker run -d --name v2ray --network=host --restart=always -v /etc/v2ray:/etc/v2ray v2fly/v2fly-core  v2ray -config=/etc/v2ray/config.json
-```
-
-```
-docker exec v2ray cat /etc/v2ray/config.json
-```
-
-```
-docker logs v2ray -f
-```
-
-
-
-### 客户端更新pac脚本
-
-https://github.com/Cenmrev/V2RayX/issues/319
-
-
-
-### NGINX
-
-这个方案可以共用80端口。
-
-https://github.com/wubaiqing/v2ray-docker-compose/blob/master/docker-compose.yml
 
 
 
