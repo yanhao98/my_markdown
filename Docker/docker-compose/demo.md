@@ -1,4 +1,5 @@
 ```yaml
+
 version: "3"
 services:
   # 项目 item
@@ -23,6 +24,7 @@ services:
 networks:
   sauceapp-network:
     external: true
+EOF
 ```
 
 
