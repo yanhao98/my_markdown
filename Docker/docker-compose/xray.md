@@ -6,11 +6,74 @@
 mkdir -p /xray && mkdir -p /xray/adguardhome/conf
 ```
 
-## 创建xray配置文件
+## 创建Xray配置文件
 
-```shell
+```json
 cat > /xray/config.json <<EOF
-🤖Server JSON Content...🤖
+{
+    "log": {
+        "access": "/var/log/xray/access.log",
+        "error": "/var/log/xray/error.log",
+        "loglevel": "debug",
+        "dnsLog": true
+    },
+    "inbounds": [
+        {
+            "port": 9000,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0",
+                        "email": "default@yanhao.ren",
+                        "flow": "xtls-rprx-direct"
+                    }
+                ],
+                "decryption": "none"
+                // 现阶段需要填 "none"，不能留空。
+                /* "fallbacks": [
+                    {
+                        "dest": 33222
+                    }
+                ] */
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "tcpSettings": {
+                    "header": {
+                        "type": "http",
+                        "response": {
+                            "version": "1.1",
+                            "status": "200",
+                            "reason": "OK",
+                            "headers": {
+                                "Content-Type": [
+                                    "application/octet-stream",
+                                    "application/x-msdownload",
+                                    "text/html",
+                                    "application/x-shockwave-flash",
+                                    "video/mpeg"
+                                ],
+                                "Transfer-Encoding": [
+                                    "chunked"
+                                ],
+                                "Connection": [
+                                    "keep-alive"
+                                ],
+                                "Pragma": "no-cache"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
+}
 EOF
 ```
 
@@ -23,7 +86,7 @@ bind_port: 3000
 beta_bind_port: 0
 users:
 - name: root
-  password: $2a$10$85HSW7nVK7D9WzF/UBmHdeBN630rRQzXjptj1dS8IXhGAaxnOxtz2
+  password: $2a$10$jBlu7/mhpmgxMGqnE2jOs.2xw4SGZnJZeO4my7uKafHisWylIcjzi
 auth_attempts: 5
 block_auth_min: 15
 http_proxy: ""
