@@ -277,6 +277,14 @@ Commands:
   rm          Remove one or more volumes
 ```
 
+
+
+# 数据拷贝
+
+```
+docker cp /root/www 96f7f14e99ab:/www
+```
+
 # Volumes迁移
 
 ## 备份
@@ -374,58 +382,6 @@ $ docker logs -t --since="2018-02-08T13:23:37" --until "2018-02-09T12:23:37" CON
 自定义配置文件
 
 ![image-20200415115422979](http://mdpic.yanhao.ren/69f664dc27b7238ad73839651381f97a.jpg)
-
-
-
-## shadowcosks-libev
-
-### fast_open 系统配置
-
-```
-echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.conf
-```
-
-https://chenjx.cn/linux-tfo/
-
-### 创建配置文件
-
-```shell
-mkdir /etc/shadowsocks-libev
-cat > /etc/shadowsocks-libev/config.json <<EOF
-{
-    "server":"0.0.0.0",
-    "server_port":9000,
-    "password":"VPNbyYanhao",
-    "timeout":300,
-    "method":"chacha20-ietf-poly1305",
-    "fast_open":true,
-    "nameserver":"8.8.8.8",
-    "mode":"tcp_and_udp",
-    "plugin":"obfs-server",
-    "plugin_opts":"obfs=http"
-}
-EOF
-```
-
-### 启动
-
-```shell
-docker run -d  -p 4848:9000/tcp -p 4848:9000/udp --name ss --restart=always -v /etc/shadowsocks-libev:/etc/shadowsocks-libev teddysun/shadowsocks-libev
-```
-
-```shell
-docker run -d --name ss --restart always --net host -v /etc/shadowsocks-libev:/etc/shadowsocks-libev teddysun/shadowsocks-libev
-```
-
-```shell
-docker logs ss
-```
-
-
-
-### Adguard 搭配
-
-https://kb.adguard.com/zh/macos/solving-problems/big-sur-issues#shadowsocks
 
 
 
