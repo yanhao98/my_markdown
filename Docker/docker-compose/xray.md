@@ -277,11 +277,13 @@ http://www.ab126.com/goju/10822.html
 cd /xray/ && docker-compose up -d
 ```
 
-http://129.226.154.163:3000
+### 编辑 Adguard Home 密码
 
-**在面板配置后重启**
+```
+/xray/adguardhome/conf/AdGuardHome.yaml
+```
 
-```shell
-cd /xray/ && docker-compose rm -sf && docker-compose up -d
+```
+docker restart adguardhome
 ```
 

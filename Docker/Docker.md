@@ -14,30 +14,13 @@ curl -fsSL https://get.docker.com/ | sh
 systemctl start docker && systemctl enable docker && systemctl status docker
 ```
 
-开机启动docker
+## Docker Compose
+
+https://docs.docker.com/compose/install/
 
 ```shell
-systemctl enable docker
-```
-
-查看docker状态
-
-```shell
-systemctl status docker
-```
-
-
-
-守护进程重启
-
-```shell
-systemctl daemon-reload
-```
-
-重启docker服务
-
-```shell
-systemctl restart docker
+sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+&& chmod +x /usr/local/bin/docker-compose && docker-compose -version
 ```
 
 关闭docker
@@ -62,27 +45,6 @@ EOF
 ```
 
 https://www.daocloud.io/mirror
-
-## Docker Compose
-
-https://docs.docker.com/compose/install/
-
-```shell
-sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
-&& chmod +x /usr/local/bin/docker-compose && docker-compose -version
-```
-
-### docker-compose 使用
-
-```
-docker-compose -f /xx.yml up -d
-```
-
-```bash
-GID="$(id -g)" docker-compose config
-```
-
-
 
 # 卸载
 
