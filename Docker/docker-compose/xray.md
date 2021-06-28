@@ -230,24 +230,23 @@ docker network create --subnet=172.18.0.0/16 xray-network
 
 ```yaml
 cat > /xray/docker-compose.yml <<EOF
-version: "2"
+version: "3"
 services:
   # Xray
   xray:
     image: teddysun/xray
     container_name: xray
+    # Docker 容器的网络模式需要是 Host
+    # https://github.com/XTLS/Xray-core/releases/tag/v1.3.0
+    network_mode: "host"
     dns:
       - 172.18.0.31
-    ports:
-      - 80:9000/tcp
     volumes:
       - .:/etc/xray
       - ./log:/var/log/xray
     restart: always
     depends_on:
       - adguardhome
-    networks:
-      - xray-network
   # AdGuard Home
   adguardhome:
     image: adguard/adguardhome
@@ -259,11 +258,14 @@ services:
       - ./adguardhome/conf:/opt/adguardhome/conf
     restart: always
     networks:
-      xray-network:
+      adguardhome:
         ipv4_address: 172.18.0.31
 networks:
-  xray-network:
+  adguardhome:
     external: true
+# docker network create --subnet=172.18.0.0/16 adguardhome
+
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#network-configuration-reference
 EOF
 ```
 
