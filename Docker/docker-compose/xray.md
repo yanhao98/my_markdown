@@ -19,60 +19,102 @@ cat > /xray/config.json <<EOF
     },
     "inbounds": [
         {
-            "port": 9000,
+            "port": 80,
             "protocol": "vless",
             "settings": {
                 "clients": [
                     {
-                        "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0",
-                        "email": "default@yanhao.ren",
-                        "flow": "xtls-rprx-direct"
+                        "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0", // 填写你的 UUID
+                        "level": 0,
+                        "email": "http@yanhao.ren"
                     }
                 ],
-                "decryption": "none"
-                // 现阶段需要填 "none"，不能留空。
-                /* "fallbacks": [
+                "decryption": "none",
+                "fallbacks": [
                     {
-                        "dest": 33222
+                        "dest": "3000"
+                    },
+                    {
+                        "path": "/chinaunicom", // 必须换成自定义的 PATH
+                        "dest": 1234,
+                        "xver": 1
                     }
-                ] */
+                ]
             },
             "streamSettings": {
                 "network": "tcp",
-                "tcpSettings": {
-                    "header": {
-                        "type": "http",
-                        "response": {
-                            "version": "1.1",
-                            "status": "200",
-                            "reason": "OK",
-                            "headers": {
-                                "Content-Type": [
-                                    "application/octet-stream",
-                                    "application/x-msdownload",
-                                    "text/html",
-                                    "application/x-shockwave-flash",
-                                    "video/mpeg"
-                                ],
-                                "Transfer-Encoding": [
-                                    "chunked"
-                                ],
-                                "Connection": [
-                                    "keep-alive"
-                                ],
-                                "Pragma": "no-cache"
-                            }
+                "security": "none" /* ,
+                "security": "none",
+                "tlsSettings": {
+                    "alpn": [
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/path/to/fullchain.crt", // 换成你的证书，绝对路径
+                            "keyFile": "/path/to/private.key" // 换成你的私钥，绝对路径
                         }
+                    ]
+                } */
+            }
+        },
+        {
+            "port": 1234,
+            "listen": "127.0.0.1",
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0", // 填写你的 UUID
+                        "level": 0,
+                        "email": "ws@yanhao.ren"
                     }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true, // 提醒：若你用 Nginx/Caddy 等反代 WS，需要删掉这行
+                    "path": "/chinaunicom" // 必须换成自定义的 PATH，需要和上面的一致
                 }
             }
         }
     ],
     "outbounds": [
+        // 5.1 第一个出站是默认规则，freedom就是对外直连（vps已经是外网，所以直连）
         {
+            "tag": "direct",
             "protocol": "freedom"
+        },
+        // 5.2 屏蔽规则，blackhole协议就是把流量导入到黑洞里（屏蔽）
+        {
+            "tag": "block",
+            "protocol": "blackhole"
         }
-    ]
+    ],
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+            // 3.1 防止服务器本地流转问题：如内网被攻击或滥用、错误的本地回环等
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private" // 分流条件：geoip文件内，名为"private"的规则（本地）
+                ],
+                "outboundTag": "block" // 分流策略：交给出站"block"处理（黑洞屏蔽）
+            },
+            // 3.2 屏蔽广告
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads-all" // 分流条件：geosite文件内，名为"category-ads-all"的规则（各种广告域名）
+                ],
+                "outboundTag": "block" // 分流策略：交给出站"block"处理（黑洞屏蔽）
+            }
+        ]
+    }
 }
 EOF
 ```
@@ -86,7 +128,7 @@ bind_port: 3000
 beta_bind_port: 0
 users:
 - name: root
-  password: $2a$10$jBlu7/mhpmgxMGqnE2jOs.2xw4SGZnJZeO4my7uKafHisWylIcjzi
+  password: $2a$10$2t8aA97XaEkKJ5.LOvxTn.wczPczi.m2wUcAyo4NZ9Rl8BEhUwWWe
 auth_attempts: 5
 block_auth_min: 15
 http_proxy: ""
@@ -223,7 +265,7 @@ EOF
 ## 创建网卡
 
 ```shell
-docker network create --subnet=172.18.0.0/16 xray-network
+docker network create --subnet=172.18.0.0/16 adguardhome
 ```
 
 ## docker-compose.yml
@@ -242,7 +284,9 @@ services:
     dns:
       - 172.18.0.31
     volumes:
-      - .:/etc/xray
+      - ./config.json:/etc/xray/config.json
+      # installed: /usr/local/share/xray/geoip.dat
+      # installed: /usr/local/share/xray/geosite.dat
       - ./log:/var/log/xray
     restart: always
     depends_on:
@@ -266,6 +310,8 @@ networks:
 # docker network create --subnet=172.18.0.0/16 adguardhome
 
 # https://docs.docker.com/compose/compose-file/compose-file-v3/#network-configuration-reference
+
+
 EOF
 ```
 
