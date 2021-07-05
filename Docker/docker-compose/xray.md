@@ -6,7 +6,7 @@
 mkdir -p /xray && mkdir -p /xray/adguardhome/conf
 ```
 
-## 创建Xray配置文件
+## Xray配置文件
 
 ```json
 cat > /xray/config.json <<EOF
@@ -112,6 +112,167 @@ cat > /xray/config.json <<EOF
                     "geosite:category-ads-all" // 分流条件：geosite文件内，名为"category-ads-all"的规则（各种广告域名）
                 ],
                 "outboundTag": "block" // 分流策略：交给出站"block"处理（黑洞屏蔽）
+            }
+        ]
+    }
+}
+EOF
+```
+
+
+
+## Xray国内中转配置文件
+
+```json
+cat > /xray/config.json <<EOF
+{
+    "log": {
+        "access": "/var/log/xray/access.log",
+        "error": "/var/log/xray/error.log",
+        "loglevel": "debug",
+        "dnsLog": true
+    },
+    "inbounds": [
+        {
+            "port": 80,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0", // 填写你的 UUID
+                        "level": 0,
+                        "email": "http@yanhao.ren"
+                    }
+                ],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": "3000"
+                    },
+                    {
+                        "path": "/chinaunicom", // 必须换成自定义的 PATH
+                        "dest": 1234,
+                        "xver": 1
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none"
+            }
+        },
+        {
+            "port": 1234,
+            "listen": "127.0.0.1",
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0", // 填写你的 UUID
+                        "level": 0,
+                        "email": "ws@yanhao.ren"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true, // 提醒：若你用 Nginx/Caddy 等反代 WS，需要删掉这行
+                    "path": "/chinaunicom" // 必须换成自定义的 PATH，需要和上面的一致
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        // 腾讯云-香港-ws
+        {
+            "tag": "腾讯云-香港-ws",
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "43.132.176.104", // 换成你的域名或服务器 IP（发起请求时无需解析域名了）
+                        "port": 80,
+                        "users": [
+                            {
+                                "id": "36e7e680-7e6c-4270-bcfc-d954dcb9d0e0", // 填写你的 UUID
+                                "encryption": "none"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/chinaunicom" // 必须换成自定义的 PATH，需要和服务端的一致
+                }
+            }
+        },
+        // 5.1 第一个出站是默认规则，freedom就是对外直连（vps已经是外网，所以直连）
+        {
+            "tag": "成都直连",
+            "protocol": "freedom"
+        },
+        // 5.2 屏蔽规则，blackhole协议就是把流量导入到黑洞里（屏蔽）
+        {
+            "tag": "block",
+            "protocol": "blackhole"
+        }
+    ],
+    "routing": {
+        // https://xtls.github.io/config/base/routing/
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            // 3.1 防止服务器本地流转问题：如内网被攻击或滥用、错误的本地回环等
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private" // 分流条件：geoip文件内，名为"private"的规则（本地）
+                ],
+                "outboundTag": "block" // 分流策略：交给出站"block"处理（黑洞屏蔽）
+            },
+            {
+                "type": "field",
+                "outboundTag": "腾讯云-香港-ws",
+                "domain": [
+                    "geosite:geolocation-!cn"
+                ]
+            },
+            // 3.2 屏蔽广告
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads-all" // 分流条件：geosite文件内，名为"category-ads-all"的规则（各种广告域名）
+                ],
+                "outboundTag": "block" // 分流策略：交给出站"block"处理（黑洞屏蔽）
+            },
+            // 配置国内网站和IP直连规则
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:apple-cn",
+                    "geosite:google-cn",
+                    "geosite:tld-cn",
+                    "geosite:category-games@cn"
+                ],
+                "outboundTag": "成都直连"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:cn"
+                ],
+                "outboundTag": "成都直连"
+            },
+            {
+                "type": "field",
+                "outboundTag": "成都直连",
+                "domain": [
+                    "geosite:cn"
+                ]
             }
         ]
     }
@@ -285,6 +446,10 @@ services:
       - 172.18.0.31
     volumes:
       - ./config.json:/etc/xray/config.json
+      # - ./geoip.dat:/usr/share/xray/geoip.dat
+      # - ./geosite.dat:/usr/share/xray/geosite.dat
+      - ./geoip.dat:/usr/local/share/xray/geoip.dat
+      - ./geosite.dat:/usr/local/share/xray/geosite.dat
       # installed: /usr/local/share/xray/geoip.dat
       # installed: /usr/local/share/xray/geosite.dat
       - ./log:/var/log/xray
@@ -310,14 +475,30 @@ networks:
 # docker network create --subnet=172.18.0.0/16 adguardhome
 
 # https://docs.docker.com/compose/compose-file/compose-file-v3/#network-configuration-reference
-
-
 EOF
 ```
 
 ## Bcrypt密码在线生成计算器
 
 http://www.ab126.com/goju/10822.html
+
+
+
+## 下载 [rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat)
+
+```shell
+sudo curl -L "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" -o /xray/geoip.dat
+```
+
+```shell
+sudo curl -L "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" -o /xray/geosite.dat
+```
+
+```
+wget -O /usr/share/xray/geosite.dat https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
+```
+
+
 
 ## RUN
 
